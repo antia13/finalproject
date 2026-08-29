@@ -42,20 +42,4 @@ FULL PROJECT DEVELOPMENT STEPS:
     Phase 11: Documentation 
     Phase 12: Final Presentation 
 
-Date
-Milestone(s)
-Sep 4
-Phases 1,2,3,4,5,6
-Sep 18
-Phase 7
-Oct 2
-Phase 8
-Oct 16
-Phase 9
-Oct 30
-Phase 10
-Nov 13
-Phase 11
-Dec 4
-Phase 12
 
