@@ -12,10 +12,10 @@ CORE FEATURES:
 5. Emergency Alerts
 
 SECURITY AND ETHICS 
-    HIPAA awareness 
-    Data privacy 
-    Medical disclaimer 
-    Not replacing doctors
+1. HIPAA awareness
+2. Data privacy
+3. Medical disclaimer
+4. Not replacing doctors
 
 DATA 
 1. Medication Search: RxNav - LHNCBC 
@@ -23,23 +23,23 @@ DATA
 3. Drug Information Display: openFDA
 
 ARCHITECTURE OF THE PROJECT:
-    Hybrid approach
-    Local data: drug interaction and profiles data
-    Remote API calls: medication information  
+1. Hybrid approach
+2. Local data: drug interaction and profiles data
+3. Remote API calls: medication information  
 
 
 FULL PROJECT DEVELOPMENT STEPS: 
-    Phase 1: Research and Planning 
-    Phase 2: Database Design
-    Phase 3: Environment Setup
-    Phase 4: Database Development
-    Phase 5: Backend Development 
-    Phase 6: Frontend Development 
-    Phase 7: Integration 
-    Phase 8: Security 
-    Phase 9: Testing
-    Phase 10:  Deployment 
-    Phase 11: Documentation 
-    Phase 12: Final Presentation 
+- Phase 1: Research and Planning
+- Phase 2: Database Design
+- Phase 3: Environment Setup
+- Phase 4: Database Development
+- Phase 5: Backend Development
+- Phase 6: Frontend Development
+- Phase 7: Integration
+- Phase 8: Security
+- Phase 9: Testing
+- Phase 10:  Deployment
+- Phase 11: Documentation
+- Phase 12: Final Presentation 
 
 
