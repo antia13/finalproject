@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 load_dotenv()
 
@@ -13,11 +13,17 @@ if not DATABASE_URL:
 
 engine = create_engine(DATABASE_URL)
 
+
+class Base(DeclarativeBase):
+    pass
+
+
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
     bind=engine
 )
+
 
 def get_db():
     db = SessionLocal()
@@ -25,6 +31,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 def test_database_connection():
     with engine.connect() as connection:
