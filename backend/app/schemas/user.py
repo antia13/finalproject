@@ -1,6 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
 
-
 class UserCreate(BaseModel):
     username: str = Field(min_length=3, max_length=100)
     email: EmailStr
@@ -15,3 +14,4 @@ class UserLogin(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    

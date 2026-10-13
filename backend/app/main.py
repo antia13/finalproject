@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.database import test_database_connection
+from app.auth.routes import router as auth_router
 
 app = FastAPI(
     title="Health Application API",
@@ -23,3 +24,5 @@ def database_test():
         "database_connection": "successful",
         "test_result": result
     }
+
+app.include_router(auth_router)
