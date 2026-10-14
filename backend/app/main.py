@@ -3,6 +3,10 @@
 from app.database import test_database_connection
 from app.auth.routes import router as auth_router
 
+from app.medications.routes import router as medication_router
+
+from app.interactions.routes import router as interaction_router
+
 app = FastAPI(
     title="Health Application API",
     description="Backend API for the Health Application",
@@ -28,3 +32,5 @@ def database_test():
 
 
 app.include_router(auth_router)
+app.include_router(medication_router)
+app.include_router(interaction_router)
