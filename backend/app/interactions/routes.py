@@ -22,9 +22,14 @@ def check_medication_interaction(
             status_code=400,
             detail="Select two different medication IDs"
         )
-
-    return check_interaction(
-        db,
-        medication1_id,
-        medication2_id
-    )
+    try:
+        return check_interaction(
+            db,
+            medication1_id,
+            medication2_id
+        )
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to check medication interactions right now"
+        )

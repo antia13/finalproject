@@ -42,9 +42,17 @@ def register_user(
         password_hash=hash_password(user_data.password)
     )
 
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+    try:
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+
+    except Exception:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Unable to register user right now"
+        )
 
     return {
         "message": "User registered successfully",
