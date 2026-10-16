@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 ﻿import os
+=======
+
+import os
+>>>>>>> 7e5c60799465a71038c34171682412c1987d72a5
 from datetime import datetime, timedelta, timezone
 
 import jwt
@@ -55,4 +60,8 @@ def verify_access_token(token: str) -> int:
         return int(user_id)
 
     except (jwt.InvalidTokenError, ValueError, TypeError):
+<<<<<<< HEAD
         raise ValueError("Invalid or expired token")
+=======
+        raise ValueError("Invalid or expired token")
+>>>>>>> 7e5c60799465a71038c34171682412c1987d72a5
