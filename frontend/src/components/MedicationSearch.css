@@ -1,0 +1,133 @@
+
+.medication-search {
+  padding: 28px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 5px 20px rgba(30, 60, 100, 0.05);
+}
+
+.medication-search-heading {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.medication-search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  background: #eaf2fc;
+  color: #3978c5;
+  font-size: 28px;
+}
+
+.medication-search-heading h2 {
+  color: #203b5c;
+  font-size: 20px;
+}
+
+.medication-search-heading p {
+  margin-top: 5px;
+  color: #718096;
+  font-size: 13px;
+}
+
+.medication-search-form {
+  display: flex;
+  gap: 10px;
+}
+
+.medication-search-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 13px 15px;
+  border: 1px solid #dce4ee;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+}
+
+.medication-search-form input:focus {
+  border-color: #3978c5;
+  box-shadow: 0 0 0 3px rgba(57, 120, 197, 0.1);
+}
+
+.medication-search-form button {
+  padding: 0 22px;
+  border: none;
+  border-radius: 8px;
+  background: #3978c5;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.medication-search-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.medication-results {
+  margin-top: 28px;
+}
+
+.medication-results h3 {
+  margin-bottom: 15px;
+  color: #203b5c;
+  font-size: 17px;
+}
+
+.medication-result-card {
+  padding: 17px;
+  margin-bottom: 10px;
+  border: 1px solid #e5ebf2;
+  border-radius: 9px;
+  background: #fbfcfe;
+}
+
+.medication-result-card h4 {
+  margin-bottom: 8px;
+  color: #203b5c;
+  font-size: 15px;
+}
+
+.medication-result-card p {
+  margin-top: 4px;
+  color: #718096;
+  font-size: 12px;
+}
+
+.medication-error {
+  margin-top: 15px;
+  color: #c0392b;
+  font-size: 13px;
+}
+
+.medication-empty {
+  margin-top: 20px;
+  color: #718096;
+  font-size: 14px;
+}
+
+.medication-disclaimer {
+  margin-top: 22px;
+  padding-top: 15px;
+  border-top: 1px solid #edf0f5;
+  color: #8a96a6;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+@media (max-width: 550px) {
+  .medication-search-form {
+    flex-direction: column;
+  }
+
+  .medication-search-form button {
+    padding: 13px;
+  }
+}

@@ -479,4 +479,52 @@ footer {
 }
 
 
+.search-status {
+  margin-top: 18px;
+  color: #718096;
+  font-size: 14px;
+}
+
+.search-error {
+  margin-top: 18px;
+  color: #c0392b;
+  font-size: 14px;
+}
+
+.search-results {
+  margin-top: 25px;
+}
+
+.search-results h4 {
+  margin-bottom: 15px;
+  color: #203b5c;
+  font-size: 17px;
+}
+
+.search-result {
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 1px solid #e5ebf2;
+  border-radius: 9px;
+  background: #fbfcfe;
+}
+
+.search-result h5 {
+  margin-bottom: 8px;
+  color: #203b5c;
+  font-size: 14px;
+}
+
+.search-result p {
+  margin-top: 5px;
+  color: #718096;
+  font-size: 12px;
+}
+
+.search-results {
+  max-height: 450px;
+  overflow-y: auto;
+}
+
+
 }
