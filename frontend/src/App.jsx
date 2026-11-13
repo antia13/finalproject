@@ -29,10 +29,24 @@ function App() {
   const [checkingLogin, setCheckingLogin] = useState(true)
   const [activePage, setActivePage] = useState('dashboard')
 
-  // User profile (read-only)
+  // User profile
   const [profile, setProfile] = useState(null)
   const [profileLoading, setProfileLoading] = useState(false)
   const [profileError, setProfileError] = useState('')
+  // Editable User Profile
+  const [profileForm, setProfileForm] = useState({
+    username: '',
+    email: '',
+    date_of_birth: '',
+    medical_conditions: '',
+    doctor_name: '',
+    doctor_phone: '',
+    emergency_contact_name: '',
+    emergency_contact_relationship: '',
+    emergency_contact_phone: '',
+  })
+  const [profileSaving, setProfileSaving] = useState(false)
+  const [profileSuccess, setProfileSuccess] = useState('')
   
   // My Medications
   const [myMedications, setMyMedications] = useState([])
@@ -88,6 +102,17 @@ function App() {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!cancelled) setProfile(result)
+        setProfileForm({
+          username: result.username || '',
+          email: result.email || '',
+          date_of_birth: result.date_of_birth || '',
+          medical_conditions: result.medical_conditions || '',
+          doctor_name: result.doctor_name || '',
+          doctor_phone: result.doctor_phone || '',
+          emergency_contact_name: result.emergency_contact_name || '',
+          emergency_contact_relationship: result.emergency_contact_relationship || '',
+          emergency_contact_phone: result.emergency_contact_phone || '',
+        })
       } catch (error) {
         if (!cancelled) setProfileError(error.message || 'Unable to load your profile.')
       } finally {
@@ -198,6 +223,50 @@ function App() {
       )
     } finally {
       setAddingMedication(false)
+    }
+  }
+
+  // Save the user's updated profile information
+  async function handleSaveProfile(event) {
+    event.preventDefault()
+
+    if (!token || profileSaving) return
+
+    setProfileSaving(true)
+    setProfileError('')
+    setProfileSuccess('')
+
+    try {
+      const updatedProfile = await apiRequest('/profile/', {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          username: profileForm.username.trim(),
+          email: profileForm.email.trim(),
+          date_of_birth: profileForm.date_of_birth || null,
+          medical_conditions: profileForm.medical_conditions.trim() || null,
+          doctor_name: profileForm.doctor_name.trim() || null,
+          doctor_phone: profileForm.doctor_phone.trim() || null,
+          emergency_contact_name: profileForm.emergency_contact_name.trim() || null,
+          emergency_contact_relationship: profileForm.emergency_contact_relationship.trim() || null,
+          emergency_contact_phone:profileForm.emergency_contact_phone.trim() || null,
+        }),
+      })
+
+      setProfile((previousProfile) => ({
+        ...previousProfile,
+        ...updatedProfile,
+      }))
+
+      setProfileSuccess('Profile updated successfully!')
+    } catch (error) {
+      setProfileError(
+        error.message || 'Unable to update your profile.'
+      )
+    } finally {
+      setProfileSaving(false)
     }
   }
 
@@ -334,12 +403,15 @@ function App() {
   return (
     <div className="app">
       <aside className="sidebar">
+                <p className="nav-label"></p>
+
         <div className="brand">
+          
           <span className="brand-icon">✚</span>
           <span>HEALTHCARE</span>
         </div>
 
-        <p className="nav-label">MENU</p>
+        <p className="nav-label"></p>
         <nav>
           <a
             className={`nav-item ${activePage === 'dashboard' ? 'active' : ''}`}
@@ -349,7 +421,17 @@ function App() {
               navigateTo('dashboard')
             }}
           >
-            Dashboard
+            <span className = "icon">🏠</span> Home
+          </a>
+          <a
+            className={`nav-item ${activePage === 'profile' ? 'active' : ''}`}
+            href="#profile"
+            onClick={(event) => { 
+              event.preventDefault()
+              navigateTo('profile')
+            }}
+          >
+            <span className = "icon">👤</span> My Profile
           </a>
           <a
             className={`nav-item ${activePage === 'my-medications' ? 'active' : ''}`}
@@ -360,38 +442,9 @@ function App() {
               loadMyMedications()
             }}
           >
-            My Medications
+            <span className = "icon">💊</span> My Medications
           </a>
-          <a
-            className="nav-item"
-            href="#interactions"
-            onClick={(event) => {
-              event.preventDefault()
-              navigateTo('dashboard', 'interactions')
-            }}
-          >
-            Interactions
-          </a>
-          <a
-            className="nav-item"
-            href="#drug-info"
-            onClick={(event) => {
-              event.preventDefault()
-              navigateTo('dashboard', 'drug-info')
-            }}
-          >
-            Drug Information
-          </a>
-          <a
-            className={`nav-item ${activePage === 'profile' ? 'active' : ''}`}
-            href="#profile"
-            onClick={(event) => {
-              event.preventDefault()
-              navigateTo('profile')
-            }}
-          >
-            My Profile
-          </a>
+      
         </nav>
 
         <div className="sidebar-note">
@@ -416,8 +469,6 @@ function App() {
             </h1>
           </div>
           <div className="profile-badge">
-            <span className="avatar">U</span>
-            <span>My Account</span>
             <button onClick={handleLogout}>Sign Out</button>
           </div>
         </header>
@@ -437,7 +488,7 @@ function App() {
             </section>
 
             <section className="section-heading" id="medications">
-              <div><h2>Medication tools</h2></div>
+              <div><h2>MEDICATION TOOLS</h2></div>
             </section>
 
             <section className="tool-grid">
@@ -445,7 +496,7 @@ function App() {
               <article className="tool-card">
                 <div className="tool-icon search-icon">⌕</div>
                 <h3>Search Medications</h3>
-                <p>Find medication names and information available in RxNorm.</p>
+                <p>Find medication names and information available in the RxNorm database.</p>
                 <form className="search-form" onSubmit={handleMedicationSearch}>
                   <input
                     value={search}
@@ -611,14 +662,10 @@ function App() {
         {/* Separate My Medications view */}
         {activePage === 'my-medications' && (
           <section className="my-medications-section" id="my-medications">
-            <div className="section-heading">
-              <h2>My Medications</h2>
-            </div>
-
             <article className="tool-card my-medications-card">
               <div className="tool-icon">💊</div>
 
-              <h3>Saved Medications</h3>
+              <h3>SAVED MEDICATIONS</h3>
 
               <p>
                 View and manage the medications saved to your personal list.
@@ -652,7 +699,7 @@ function App() {
                   type="text"
                   value={newMedicationFrequency}
                   onChange={(event) => setNewMedicationFrequency(event.target.value)}
-                  placeholder="Frequency (e.g. Twice daily)"
+                  placeholder="Frequency (e.g. Twice a day)"
                   aria-label="Medication frequency"
                   maxLength={255}
                 />
@@ -691,7 +738,7 @@ function App() {
               {!myMedicationsLoading && myMedications.length > 0 && (
                 <div className="search-results">
                   <h4>
-                    My Medication List ({myMedications.length})
+                    MY MEDICATION LIST ({myMedications.length})
                   </h4>
 
                   {myMedications.map((medication) => (
@@ -699,19 +746,10 @@ function App() {
                       className="search-result"
                       key={medication.user_med_id}
                     >
-                      <h5>{medication.drug_name}</h5>
-
-                      {medication.generic_name && (
+                      {medication.drug_name && (
                         <p>
-                          <strong>Generic Name:</strong>{' '}
-                          {medication.generic_name}
-                        </p>
-                      )}
-
-                      {medication.brand_name && (
-                        <p>
-                          <strong>Brand Name:</strong>{' '}
-                          {medication.brand_name}
+                          <strong>Drug Name:</strong>{' '}
+                          {medication.drug_name}
                         </p>
                       )}
 
@@ -750,19 +788,137 @@ function App() {
         {/* Separate My Profile view */}
         {activePage === 'profile' && (
           <section className="profile-section" id="profile">
-            <div className="section-heading">
-              <h2>My Profile</h2>
-            </div>
             <article className="tool-card profile-card">
-              <div className="tool-icon">♙</div>
-              <h3>Account Information</h3>
-              <p>View your account details.</p>
+              <div className="tool-icon">👤</div>
+              <h3>ACCOUNT INFORMATION </h3>
               {profileLoading && <p className="search-status">Loading your profile...</p>}
               {profileError && <p className="search-error">{profileError}</p>}
               {profile && !profileLoading && (
                 <div className="profile-details">
                   <p><strong>Username:</strong> {profile.username}</p>
                   <p><strong>Email:</strong> {profile.email}</p>
+
+                  {profile && !profileLoading && (
+                    <form
+                      className="profile-details"
+                       onSubmit={handleSaveProfile}
+                    >
+                  
+                      <p></p><h3>MEDICAL INFORMATION</h3>
+
+                      <p></p><label htmlFor="profile-dob">Date of Birth: </label>
+                      <input
+                        id="profile-dob"
+                        type="date"
+                        value={profileForm.date_of_birth}
+                        onChange={(event) =>
+                          setProfileForm({
+                            ...profileForm,
+                            date_of_birth: event.target.value,
+                          })
+                        }
+                        max={new Date().toISOString().slice(0, 10)}
+                      />
+
+                      <p></p><label htmlFor="profile-conditions">Known Medical Conditions: </label>
+                      <input
+                        id="profile-conditions"
+                        value={profileForm.medical_conditions}
+                        onChange={(event) =>
+                          setProfileForm({
+                            ...profileForm,
+                            medical_conditions: event.target.value,
+                          })
+                        }
+                        placeholder="e.g. Diabetes, Asthma"
+                        maxLength={500}
+                      />
+
+                      <p></p><p></p><h3>DOCTOR INFORMATION</h3>
+
+                      <p></p><label htmlFor="profile-doctor">Doctor's Name: </label>
+                      <input
+                        type="text"
+                        value={profileForm.doctor_name}
+                        onChange={(event) => setProfileForm({
+                          ...profileForm,
+                          doctor_name: event.target.value
+                        })}
+                        maxLength={255}
+                      />
+
+                      <p></p><label htmlFor="profile-doctor-phone">  Doctor's Phone Number: </label>
+                      <input
+                        id="profile-doctor-phone"
+                        type="tel"
+                        value={profileForm.doctor_phone}
+                        onChange={(event) =>
+                          setProfileForm({
+                            ...profileForm,
+                            doctor_phone: event.target.value,
+                          })
+                        }
+                        placeholder="e.g. 000-000-0000"
+                        maxLength={30}
+                      />
+
+                      <p></p><h3>EMERGENCY CONTACT</h3>
+
+                      <p></p><label htmlFor="profile-emergency-name"> Emergency Contact Name: </label>
+                      <input
+                        id="profile-emergency-name"
+                        type="text"
+                        value={profileForm.emergency_contact_name}
+                        onChange={(event) =>
+                          setProfileForm({
+                            ...profileForm,
+                            emergency_contact_name: event.target.value,
+                          })
+                        }
+                        maxLength={150}
+                      />
+
+                      <p></p><label htmlFor="profile-emergency-relationship"> Relationship: </label>
+                      <input
+                        id="profile-emergency-relationship"
+                        type="text"
+                        value={profileForm.emergency_contact_relationship}
+                        onChange={(event) =>
+                          setProfileForm({
+                            ...profileForm,
+                            emergency_contact_relationship: event.target.value,
+                          })
+                        }
+                        placeholder="e.g. Parent, Spouse, Sibling"
+                        maxLength={100}
+                    
+                        />
+
+                      <p></p><label htmlFor="profile-emergency-phone"> Emergency Contact Phone Number: </label>
+                      <input
+                        id="profile-emergency-phone"
+                        type="tel"
+                        value={profileForm.emergency_contact_phone}
+                        onChange={(event) =>
+                          setProfileForm({
+                            ...profileForm,
+                            emergency_contact_phone: event.target.value,
+                          })
+                        }
+                        placeholder="e.g. 000-000-0000"
+                        maxLength={30}
+                      />
+
+                    <p></p><button type="submit" disabled={profileSaving}>
+                        {profileSaving ? 'Saving...' : 'Save Changes'}
+                      </button>
+                    {profileSuccess && (
+                      <p className="search-status" role="status">
+                        {profileSuccess}
+                      </p>
+                    )}
+                    </form>
+                  )}
                 </div>
               )}
             </article>

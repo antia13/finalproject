@@ -1,9 +1,10 @@
-from datetime import datetime
+from datetime import date, datetime
 
-from sqlalchemy import DateTime, String
+from sqlalchemy import DateTime, String, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
+
 
 
 class User(Base):
@@ -33,4 +34,32 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         nullable=False
+    )
+
+    date_of_birth: Mapped[date | None] = mapped_column(
+        Date, nullable=True
+    )
+
+    medical_conditions: Mapped[str | None] = mapped_column(
+        Text, nullable=True
+    )
+
+    doctor_name: Mapped[str | None] = mapped_column(
+        String(150), nullable=True
+    )
+
+    doctor_phone: Mapped[str | None] = mapped_column(
+        String(30), nullable=True
+    )
+
+    emergency_contact_name: Mapped[str | None] = mapped_column(
+        String(150), nullable=True
+    )
+
+    emergency_contact_relationship: Mapped[str | None] = mapped_column(
+        String(100), nullable=True
+    )
+
+    emergency_contact_phone: Mapped[str | None] = mapped_column(
+        String(30), nullable=True
     )
