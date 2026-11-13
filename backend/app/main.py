@@ -8,6 +8,8 @@ from app.interactions.routes import router as interaction_router
 from app.drug_info.routes import router as drug_info_router
 from app.profile.routes import router as profile_router
 from app.alerts.routes import router as alert_router
+from app.user_medications.routes import router as user_medications_router
+
 
 
 app = FastAPI(
@@ -61,3 +63,5 @@ app.include_router(drug_info_router)
 app.include_router(profile_router)
 app.include_router(alert_router)
 app.include_router(auth_router)
+app.include_router(user_medications_router)
+
